@@ -415,20 +415,7 @@ Removes `B` characters from the beginning of string `A`
 Creates a block of code
 
 ## Builtin functions
-
-InstallFunc("print", _Print);
-InstallFunc("println", _Println);
-InstallFunc("gettimems", _GetTimeMs);
-InstallFunc("sleep", _Sleep);
-InstallFunc("exit", _Exit);
-InstallFunc("assert", _Assert);
-InstallFunc("randint", _RandInt);
-InstallFunc("sin", _Sin);
-InstallFunc("cos", _Cos);
-InstallFunc("abs", _Abs);
-InstallFunc("clearterminal", _ClearTerminal);
-InstallFunc("getch", _Getch);
-
+Builtin functions can be easily added in `src/predefined.cpp` file.
 ### print
 - takes zero or more arguments
 
