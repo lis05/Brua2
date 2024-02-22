@@ -1,1 +1,1 @@
-make && echo "---------------------" && ./build/main "$1"
+mkdir build && make && echo "---------------------" && ./build/main "$1"
