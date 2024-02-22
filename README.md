@@ -410,7 +410,7 @@ Removes `B` characters from the beginning of string `A`
 
 ### `(*A)`
 - `*A` is treated as zero or more instructions
-- The resutl of execution is not a value
+- The result of execution is not a value
 
 Creates a block of code
 
