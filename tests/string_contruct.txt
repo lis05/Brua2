@@ -1,0 +1,10 @@
+(set s "")
+(for (set i 'a') (le (int i) (int 'z')) (set i (char (add (int i) 1))) (
+    ([s+] s (string i))
+    (call println s)
+))
+
+(call assert (eq s "abcdefghijklmnopqrstuvwxyz") 
+                "string_constuct not the expected value")
+
+(call println "string_construct done")

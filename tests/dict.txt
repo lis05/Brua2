@@ -1,0 +1,24 @@
+(set N 100000)
+
+(set d {})
+(for (set i 0) (lt i N) (set i (add i 1))(
+    ([d+] d i (neg i))
+))
+
+(set keys ([dk] d))
+(set sum 0)
+(for (set i 0) (lt i N) (set i (add i 1))(
+    (set sum (add sum ([d] keys i)))
+))
+(call println "keys sum: " sum " " (div (mult N (sub N 1)) 2))
+(call assert (eq sum (div (mult N (sub N 1)) 2)) "dict: invalid keys sum")
+
+(set values ([dv] d))
+(set sum 0)
+(for (set i 0) (lt i N) (set i (add i 1))(
+    (set sum (add sum ([d] values i)))
+))
+(call println "values sum: " sum " " (div (mult N (sub N 1)) 2))
+(call assert (eq sum (div (mult N (sub N 1)) -2)) "dict: invalid values sum")
+
+(call println "dict done")

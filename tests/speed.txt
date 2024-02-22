@@ -1,0 +1,39 @@
+(
+(set N 1000000)
+(set start_time (call gettimems))
+(for (set i 0) (lt i N) (set i (add i 1))())
+(set stop_time (call gettimems))
+(set delta (sub stop_time start_time))
+(set delta (div delta 1000.0))
+(call println (int (div N delta)) "/s empty loops")
+)
+
+(
+(set f (func ()))
+(set N 1000000)
+(set start_time (call gettimems))
+(for (set i 0) (lt i N) (set i (add i 1))(
+    (call f)
+))
+(set stop_time (call gettimems))
+(set delta (sub stop_time start_time))
+(set delta (div delta 1000.0))
+(call println (int (div N delta)) "/s func call loops")
+)
+
+(
+(set d {})
+(set N 1000000)
+(for (set i 0) (lt i N) (set i (add i 1))(
+    ([d+] d i i)
+))
+(set start_time (call gettimems))
+(for (set i 0) (lt i N) (set i (add i 1))(
+    ([d] d i)
+))
+(set stop_time (call gettimems))
+(set delta (sub stop_time start_time))
+(set delta (div delta 1000.0))
+(call println (int (div N delta)) "/s dict(s=" ([dn] d) ") access loops")
+
+)

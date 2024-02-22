@@ -1,0 +1,91 @@
+(set small_tests 1000)
+(set array {})
+(set n 10)
+(set maxnum 100)
+
+(set sort (func (
+    (for (set i 0) (lt i n) (set i (add i 1)) (
+        (for (set ii 1) (lt ii (sub n i)) (set ii (add ii 1)) (
+            (if (gt ([d] array (sub ii 1)) ([d] array ii)) (
+                (set temp ([d] array ii))
+                (set ([d] array ii) ([d] array (sub ii 1)))
+                (set ([d] array (sub ii 1)) temp)
+            )())
+        ))
+    ))
+)))
+
+(for (set _ 0) (lt _ small_tests) (set _ (add _ 1)) (
+    (for (set i 0) (lt i n) (set i (add i 1)) (
+        ([d+] array i (call randint maxnum))
+        (call print ([d] array i) ' ')
+    ))
+    (call print " small rand\n")
+
+    (call sort)
+    (for (set i 0) (lt i n) (set i (add i 1)) (
+        (call print ([d] array i) ' ')
+    ))
+    (call print " small sorted\n")
+
+    (for (set i 1) (lt i n) (set i (add i 1)) (
+        (call assert (le ([d] array (sub i 1)) ([d] array i)) "sort_array invalid order")
+    ))
+
+    ([dc] array)
+))
+(call print "small tests done\n")
+
+(set mid_tests 100)
+(set n 100)
+(set maxnum (int 1e9))
+
+(for (set _ 0) (lt _ mid_tests) (set _ (add _ 1)) (
+    (for (set i 0) (lt i n) (set i (add i 1)) (
+        ([d+] array i (call randint maxnum))
+        (call print ([d] array i) ' ')
+    ))
+    (call print " mid rand\n")
+
+    (call sort)
+    (for (set i 0) (lt i n) (set i (add i 1)) (
+        (call print ([d] array i) ' ')
+    ))
+    (call print " mid sorted\n")
+
+    (for (set i 1) (lt i n) (set i (add i 1)) (
+        (call assert (le ([d] array (sub i 1)) ([d] array i)) "sort_array invalid order")
+    ))
+
+    ([dc] array)
+))
+
+(call print "mid tests done\n")
+
+
+(set big_tests 10)
+(set n 1000)
+(set maxnum (int 1e18))
+
+(for (set _ 0) (lt _ big_tests) (set _ (add _ 1)) (
+    (for (set i 0) (lt i n) (set i (add i 1)) (
+        ([d+] array i (call randint maxnum))
+        (call print ([d] array i) ' ')
+    ))
+    (call print " big rand\n")
+
+    (call sort)
+    (for (set i 0) (lt i n) (set i (add i 1)) (
+        (call print ([d] array i) ' ')
+    ))
+    (call print " big sorted\n")
+
+    (for (set i 1) (lt i n) (set i (add i 1)) (
+        (call assert (le ([d] array (sub i 1)) ([d] array i)) "sort_array invalid order")
+    ))
+
+    ([dc] array)
+))
+
+(call print "big tests done\n")
+(call println "sort_array done")

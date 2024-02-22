@@ -1,0 +1,6 @@
+(for (set i 0) (le i 1000) (set i (add i 1)) (
+    (set sq (mult i i))
+    (call print sq ' ')
+    (call assert (eq sq (mult i i)) "squares: i*i != i^2")
+))
+(call println "\nsquares done")

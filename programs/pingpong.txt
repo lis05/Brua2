@@ -1,0 +1,178 @@
+(set WIDTH 40)
+(set HEIGHT 12)
+(set TICKS 10)
+(set BOARDSSPEED 3)
+(set BALLSPEED 2)
+(set moveup (func (
+    (return (eq (call getch) 'w'))
+)))
+(set movedown (func (
+    (return (eq (call getch) 's'))
+)))
+(set field {})
+(set myboard {})
+(set aiboard {})
+(set ball {})
+(set myscore 0)
+(set aiscore 0)
+(set lastkey ' ')
+
+(for (set i 0) (lt i HEIGHT) (set i (add i 1)) (
+    ([d+] field i {})
+    (for (set ii 0) (lt ii WIDTH) (set ii (add ii 1)) (
+        ([d+] ([d] field i) ii ' ')
+    ))
+))
+
+([d+] myboard "side" -1)
+([d+] myboard "toppos" 0)
+([d+] aiboard "side" 1)
+([d+] aiboard "toppos" 0)
+([d+] ball "x" (div WIDTH 2))
+([d+] ball "y" (div HEIGHT 2))
+([d+] ball "dx" -1)
+([d+] ball "dy" -1)
+(set mydirection -1)
+
+(set drawboard (func (
+    (set board (arg 0))
+    (set x 0)
+    (if (eq ([d] board "side") 1)(
+        (set x (sub WIDTH 1))
+    )())
+    (set y ([d] board "toppos"))
+    (set ([d] ([d] field y) x) '#') (set y (add y 1))
+    (set ([d] ([d] field y) x) '#') (set y (add y 1))
+    (set ([d] ([d] field y) x) '#')
+)))
+
+(set drawball (func (
+    (set x ([d] ball "x"))
+    (set y ([d] ball "y"))
+    (set ([d] ([d] field y) x) 'o')
+)))
+
+(set draw (func (
+    (call drawboard myboard)
+    (call drawboard aiboard)
+    (call drawball)
+
+    (call clearterminal)
+    (for (set i 0) (lt i WIDTH) (set i (add i 1))(
+        (call print '-')
+    ))
+    (call println)
+    (for (set i 0) (lt i HEIGHT) (set i (add i 1)) (
+        (for (set ii 0) (lt ii WIDTH) (set ii (add ii 1)) (
+            (call print ([d] ([d] field i) ii))
+        ))
+        (call println)
+    ))
+    (for (set i 0) (lt i WIDTH) (set i (add i 1))(
+        (call print '-')
+    ))
+    (call println)
+    (call println "Score: " myscore ":" aiscore)
+)))
+
+
+(set moveboards (func (
+    (if (eq mydirection -1)(
+        (if (gt ([d] myboard "toppos") 0)(
+            (set ([d] myboard "toppos") (sub ([d] myboard "toppos") 1))
+        )())
+    )())
+    (if (eq mydirection 1)(
+        (if (lt ([d] myboard "toppos") (sub HEIGHT 3))(
+            (set ([d] myboard "toppos") (add ([d] myboard "toppos") 1))
+        )())
+    )())
+
+    (if (gt (add ([d] aiboard "toppos") 1) ([d] ball "y")) (
+        (if (gt ([d] aiboard "toppos") 0)(
+            (set ([d] aiboard "toppos") (sub ([d] aiboard "toppos") 1))
+        )())
+    )
+        (if (lt (add ([d] aiboard "toppos") 1) ([d] ball "y")) (
+            (if (lt ([d] aiboard "toppos") (sub HEIGHT 3))(
+                (set ([d] aiboard "toppos") (add ([d] aiboard "toppos") 1))
+            )())
+        )())
+    )
+)))
+
+(set moveball (func (
+    (set ballx ([d] ball "x"))
+    (set balldx ([d] ball "dx"))
+    (set bally ([d] ball "y"))
+    (set balldy ([d] ball "dy"))
+
+    (if (eq bally 0) (
+        (if (eq balldy -1) (
+            (set ([d] ball "dy") 1)
+        ) ())
+    ) ())
+    (if (eq bally (sub HEIGHT 1)) (
+        (if (eq balldy 1) (
+            (set ([d] ball "dy") -1)
+        ) ())
+    ) ())
+    (if (eq ballx 1) (
+        (set boardc (add ([d] myboard "toppos") 1))
+        (if (le (call abs (sub boardc bally)) 1) (
+            (set ([d] ball "dx") 1)
+        ) (
+            (set aiscore (add aiscore 1))
+            ([dc] ball)
+            ([d+] ball "x" (div WIDTH 2))
+            ([d+] ball "y" (div HEIGHT 2))
+            ([d+] ball "dx" 1)
+            ([d+] ball "dy" -1)
+        ))
+    ) ())
+    (if (eq ballx (sub WIDTH 2)) (
+        (set boardc (add ([d] aiboard "toppos") 1))
+        (if (le (call abs (sub boardc bally)) 1) (
+            (set ([d] ball "dx") -1)
+        ) (
+            (set myscore (add myscore 1))
+            ([dc] ball)
+            ([d+] ball "x" (div WIDTH 2))
+            ([d+] ball "y" (div HEIGHT 2))
+            ([d+] ball "dx" -1)
+            ([d+] ball "dy" 1)
+        ))
+    ) ())
+
+
+    (set ([d] ball "y") (add ([d] ball "y") ([d] ball "dy")))
+    (set ([d] ball "x") (add ([d] ball "x") ([d] ball "dx")))
+)))
+
+(call getch)
+(set tick 0)
+(set lastms 0)
+(while true (
+    (set lastkey (call getch))
+    (if (eq lastkey 'w') (set mydirection -1) ())
+    (if (eq lastkey 's') (set mydirection 1) ())
+
+    (set ms (call gettimems))
+    (if (ge (sub ms lastms) (div 1000 TICKS))(
+        (set tick (add tick 1))
+        (set lastms ms)
+        (for (set i 0) (lt i HEIGHT) (set i (add i 1)) (
+            (for (set ii 0) (lt ii WIDTH) (set ii (add ii 1)) (
+                (set ([d] ([d] field i) ii) ' ')
+            ))
+        ))
+        
+        (if (eq (rem tick BOARDSSPEED) 0) (
+            (call moveboards)
+        )())  
+        (if (eq (rem tick BALLSPEED) 0) (
+            (call moveball)
+        )())  
+        (call draw)
+    )())
+))
