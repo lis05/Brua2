@@ -1,4 +1,24 @@
 # Brua2 - a dynamically typed interpreted programming language
+*A program that determines if number 17 is prime in Brua2:*
+
+    (set check (func (
+        (set n (arg 0))
+
+        (if (le n 1) (
+            (return false)
+        ) ())
+
+        (for (set i 2) (le (mult i i) n) (set i (add i 1)) (
+            (if (eq (rem n i) 0) (
+                (return false)
+            ) ())
+        ))
+
+        (return true)
+    )))
+
+    (set num 17)
+    (call println "Number " num " is prime: " (call check num))
 ## Data Types
 There are only 8 data types: 
 - bool
